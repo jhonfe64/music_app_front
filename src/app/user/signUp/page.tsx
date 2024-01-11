@@ -3,7 +3,7 @@ import SignUpForm from "@/components/user/signUpForm/SignUpForm";
 
 function SignUp() {
   return (
-    <div className="h-screen px-8 bg-black">
+    <div className="h-screen  min-h-screen  px-8 bg-black">
       <SignUpForm />;
     </div>
   );

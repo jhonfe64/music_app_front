@@ -23,6 +23,7 @@ function SignUpForm() {
     handleSubmit,
     watch,
     control,
+    reset,
     formState: { errors },
   } = useForm<SignUpInterface>();
 
@@ -37,8 +38,6 @@ function SignUpForm() {
   };
 
   const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
-  console.log("esta es la data", data);
-  console.log("este es el error", error);
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
@@ -57,6 +56,12 @@ function SignUpForm() {
       }
     }
   }, [password, confirmPassword]);
+
+  useEffect(() => {
+    if (data?.status === "success" && data.user._id) {
+      reset();
+    }
+  }, [data]);
 
   return (
     <div className="signUpForm">

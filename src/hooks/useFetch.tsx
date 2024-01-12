@@ -24,8 +24,13 @@ const useFetch = (
               "Content-type": "application/json; charset=UTF-8",
             },
           });
-
-          if (!res.ok) throw Error("Error al consumir la api");
+          if (res.ok) {
+            const data = await res.json();
+            data && setData(data);
+          } else {
+            const data = await res.json();
+            data && setError(data);
+          }
         }
       } catch (error: any) {
         if (error) {

@@ -37,6 +37,8 @@ function SignUpForm() {
   };
 
   const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
+  console.log("esta es la data", data);
+  console.log("este es el error", error);
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");

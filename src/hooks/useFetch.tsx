@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const useFetch = (
   url: string,
   type: string,
   trigger: boolean,
-  body: any = null
-) => {
+  body: any
+): any => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
   const fetchData = async () => {
-    const [data, setData] = useState(null);
-    const [error, setError] = useState(null);
     if (trigger) {
       try {
         if ((type = "get")) {
@@ -29,14 +30,15 @@ const useFetch = (
           setError(error);
         }
       }
-      return {
-        data,
-        error,
-      };
     }
-    useEffect(() => {
-      fetchData();
-    }, [url, type, trigger]);
+  };
+  useEffect(() => {
+    fetchData();
+  }, [url]);
+  console.log(data);
+  return {
+    data,
+    error,
   };
 };
 

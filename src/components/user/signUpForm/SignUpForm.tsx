@@ -1,28 +1,60 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { SignUpInterface } from "@/interfaces/userInterfaces";
+import useFetch from "@/hooks/useFetch";
+import { user } from "@/endpoints/user";
 
 import "./signUpForm.css";
 
+//CREAR INTERFACE PARA ESTA DATA IMPORTARLA AQUI Y TIPAR
+
 function SignUpForm() {
+  const [formData, setFormData] = useState<SignUpInterface>();
+  const [trigger, setTrigger] = useState(false);
+  const [confirmPasswordAlert, setConfirmPasswordAlert] = useState(false);
+
   const {
     register,
     handleSubmit,
     watch,
     control,
     formState: { errors },
-  } = useForm<any>();
+  } = useForm<SignUpInterface>();
 
-  
-  const onSubmit: SubmitHandler<any> = (data: any) => {
-    console.log("data", data);
+  const onSubmit: SubmitHandler<SignUpInterface> = (data: SignUpInterface) => {
+    if (data) {
+      if (data.password === data.confirmPassword) {
+        delete data.confirmPassword;
+        setFormData(data);
+        setTrigger(true);
+      }
+    }
   };
 
-  //console.log(watch("password3")); // watch input value by passing the name of it
+  const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
+
+  // const password = watch("password");
+  // const confirmPassword = watch("confirmPassword");
+
+  // useEffect(() => {
+  //   if (
+  //     password &&
+  //     password.length > 0 &&
+  //     confirmPassword &&
+  //     confirmPassword.length > 0
+  //   ) {
+  //     if (password === confirmPassword) {
+  //       setConfirmPasswordAlert(false);
+  //     } else {
+  //       setConfirmPasswordAlert(true);
+  //     }
+  //   }
+  // }, [password, confirmPassword]);
 
   return (
     <div className="signUpForm">
@@ -52,6 +84,7 @@ function SignUpForm() {
             },
           }}
           {...register("name", { required: true })}
+          autoComplete="off"
         />
         {errors.name && (
           <p className="text-red-400 mb-4 text-light text-sm">
@@ -67,6 +100,7 @@ function SignUpForm() {
             },
           }}
           {...register("lastname", { required: true })}
+          autoComplete="off"
         />
         {errors.lastname && (
           <p className="text-red-400 mb-4 text-light text-sm">
@@ -84,6 +118,7 @@ function SignUpForm() {
           {...register("nick", {
             required: true,
           })}
+          autoComplete="off"
         />
         {errors.nick && (
           <p className="text-red-400 mb-4 text-light text-sm">
@@ -102,6 +137,7 @@ function SignUpForm() {
             required: true,
             pattern: /^[^s@]+@[^s@]+.[^s@]+$/,
           })}
+          autoComplete="off"
         />
         {errors?.email?.type === "required" && (
           <p className="text-red-400 mb-4 text-light text-sm">
@@ -113,67 +149,72 @@ function SignUpForm() {
             Formato invalido
           </p>
         )}
-        <div>
-          <Controller
-            name="password"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Password
-                placeholder="Ingresa tu contraseña"
-                pt={{
-                  root: {
-                    className: "w-full",
-                  },
-                  input: {
-                    className:
-                      "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-8",
-                  },
-                  panel: {
-                    className: "hidden",
-                  },
-                }}
-                {...field}
-              />
-            )}
-          />
-        </div>
+
+        <Controller
+          name="password"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <Password
+              {...field}
+              placeholder="Ingresa tu contraseña"
+              value={field.value ? field.value : ""}
+              pt={{
+                root: {
+                  className: "w-full",
+                },
+                input: {
+                  className:
+                    "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-8",
+                },
+                panel: {
+                  className: "hidden",
+                },
+              }}
+            />
+          )}
+        />
         {errors?.password?.type === "required" && (
           <p className="text-red-400 mb-4 text-light text-sm">
             Ingresa tu contraseña
           </p>
         )}
-        <div>
-          <Controller
-            name="confirmPassword"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Password
-                placeholder="Ingresa tu contraseña"
-                pt={{
-                  root: {
-                    className: "w-full",
-                  },
-                  input: {
-                    className:
-                      "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-8",
-                  },
-                  panel: {
-                    className: "hidden",
-                  },
-                }}
-                {...field}
-              />
-            )}
-          />
-        </div>
+
+        <Controller
+          name="confirmPassword"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <Password
+              {...field}
+              placeholder="Confirma tu contraseña"
+              value={field.value ? field.value : ""}
+              pt={{
+                root: {
+                  className: "w-full",
+                },
+                input: {
+                  className:
+                    "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-8",
+                },
+                panel: {
+                  className: "hidden",
+                },
+              }}
+            />
+          )}
+        />
         {errors?.confirmPassword?.type === "required" && (
           <p className="text-red-400 mb-4 text-light text-sm">
             Confirma tu contraseña
           </p>
         )}
-
+        {confirmPasswordAlert && (
+          <p className="text-red-400 mb-4 text-light text-sm">
+            Las contrseñas no coincidem
+          </p>
+        )}
+        <h1 className="bg-red">{confirmPasswordAlert}</h1>
         <Button
           pt={{
             root: {

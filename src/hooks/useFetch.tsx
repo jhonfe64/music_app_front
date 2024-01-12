@@ -29,12 +29,12 @@ const useFetch = (
             data && setData(data);
           } else {
             const data = await res.json();
-            data && setError(data.error.message);
+            data && setError(data);
           }
         }
       } catch (error: any) {
         if (error) {
-          setError(error);
+          //setError(error);
         }
       }
     }
@@ -42,6 +42,7 @@ const useFetch = (
   useEffect(() => {
     fetchData();
   }, [url, trigger, type]);
+
   return {
     data,
     error,

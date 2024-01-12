@@ -10,6 +10,7 @@ import { SignUpInterface } from "@/interfaces/userInterfaces";
 import useFetch from "@/hooks/useFetch";
 import Link from "next/link";
 import { user } from "@/endpoints/user";
+import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
 
 //mostrar el error usando la libreria
 //colocar el borde active
@@ -42,7 +43,6 @@ function SignUpForm() {
   };
 
   const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
-  console.log("este es el error", error);
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
@@ -265,6 +265,9 @@ function SignUpForm() {
           }}
         />
       </form>
+      {error?.message && (
+        <ToastifyNotification message={error.message} type={"warning"} />
+      )}
     </div>
   );
 }

@@ -12,18 +12,20 @@ const useFetch = (
   const fetchData = async () => {
     if (trigger) {
       try {
-        if ((type = "get")) {
+        if (type === "get") {
           const res = await fetch(url);
           const data = await res.json();
           data && setData(data);
-        } else if ((type = "post")) {
-          await fetch(url, {
+        } else if (type === "post") {
+          const res = await fetch(url, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
               "Content-type": "application/json; charset=UTF-8",
             },
           });
+
+          if (!res.ok) throw Error("Error al consumir la api");
         }
       } catch (error: any) {
         if (error) {
@@ -34,8 +36,7 @@ const useFetch = (
   };
   useEffect(() => {
     fetchData();
-  }, [url]);
-  console.log(data);
+  }, [url, trigger, type]);
   return {
     data,
     error,

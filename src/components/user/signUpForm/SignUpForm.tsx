@@ -38,23 +38,23 @@ function SignUpForm() {
 
   const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
 
-  // const password = watch("password");
-  // const confirmPassword = watch("confirmPassword");
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
 
-  // useEffect(() => {
-  //   if (
-  //     password &&
-  //     password.length > 0 &&
-  //     confirmPassword &&
-  //     confirmPassword.length > 0
-  //   ) {
-  //     if (password === confirmPassword) {
-  //       setConfirmPasswordAlert(false);
-  //     } else {
-  //       setConfirmPasswordAlert(true);
-  //     }
-  //   }
-  // }, [password, confirmPassword]);
+  useEffect(() => {
+    if (
+      password &&
+      password.length > 0 &&
+      confirmPassword &&
+      confirmPassword.length > 0
+    ) {
+      if (password === confirmPassword) {
+        setConfirmPasswordAlert(false);
+      } else {
+        setConfirmPasswordAlert(true);
+      }
+    }
+  }, [password, confirmPassword]);
 
   return (
     <div className="signUpForm">

@@ -5,11 +5,15 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import InputError from "@/components/common/InputError";
+import InputError from "@/components/common/inputError/InputError";
 import { SignUpInterface } from "@/interfaces/userInterfaces";
 import useFetch from "@/hooks/useFetch";
 import Link from "next/link";
 import { user } from "@/endpoints/user";
+
+//mostrar el error usando la libreria
+//colocar el borde active
+//colocarle hover a los btns
 
 import "./signUpForm.css";
 
@@ -38,6 +42,7 @@ function SignUpForm() {
   };
 
   const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
+  console.log("este es el error", error);
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
@@ -236,7 +241,7 @@ function SignUpForm() {
         )}
         {confirmPasswordAlert && (
           <p className="text-red-400 mb-4 text-light text-sm">
-            Las contrseñas no coincidem
+            Las contrseñas no coinciden
           </p>
         )}
         {errors?.confirmPassword?.type === "pattern" && (
@@ -252,10 +257,10 @@ function SignUpForm() {
           pt={{
             root: {
               className:
-                "w-full py-1 rounded-xl mt-4 bg-blue-400 border-0 rounded-0 px-5 text-center flex justify-center",
+                "w-full py-1.5  mt-4 bg-blue-400 border-0 rounded-0 px-5 text-center flex justify-center",
             },
             label: {
-              className: "border-0  text-white ",
+              className: "border-0 py-1 text-white ",
             },
           }}
         />

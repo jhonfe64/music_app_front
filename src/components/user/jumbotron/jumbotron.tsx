@@ -17,8 +17,7 @@ function Jumbotron() {
             label="Prueba ahora"
             pt={{
               root: {
-                className:
-                  "border-0 bg-blue-400  rounded-xl px-14 rounded-lg py-2",
+                className: "border-0 bg-blue-400  px-14 py-2",
               },
               label: { className: "text-white text-base sm:text-xl" },
             }}

@@ -29,7 +29,7 @@ const useFetch = (
             data && setData(data);
           } else {
             const data = await res.json();
-            data && setError(data);
+            data && setError(data.error.message);
           }
         }
       } catch (error: any) {

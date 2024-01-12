@@ -7,7 +7,11 @@ function Header() {
   return (
     <header className="flex bg-black justify-between items-center p-4 sm:p-8 py-5 fixed right-0 left-0 top-0 z-50">
       <div className="logo w-20">
-        <Image src="./images/LogoMusic.png" className="w-100 border" alt="logo" />
+        <Image
+          src="./images/LogoMusic.png"
+          className="w-100 border"
+          alt="logo"
+        />
       </div>
       <nav>
         <ul className="items-center text-white hidden sm:flex">
@@ -43,19 +47,6 @@ function Header() {
               <i className="pi pi-user-plus mr-5 "></i>
               Registrate
             </Link>
-            {/* <Button
-              link
-              label="Registrate"
-              icon="pi pi-user-plus"
-              href=""
-              pt={{
-                root: {
-                  className: "border-0 bg-blue-400  rounded-xl px-7 py-[7px]",
-                },
-                label: { className: "text-white" },
-                icon: { className: "mr-5 text-white font-semibold" },
-              }}
-            /> */}
           </li>
         </ul>
         <ul>

@@ -5,13 +5,13 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import InputError from "@/components/common/InputError";
 import { SignUpInterface } from "@/interfaces/userInterfaces";
 import useFetch from "@/hooks/useFetch";
+import Link from "next/link";
 import { user } from "@/endpoints/user";
 
 import "./signUpForm.css";
-
-//CREAR INTERFACE PARA ESTA DATA IMPORTARLA AQUI Y TIPAR
 
 function SignUpForm() {
   const [formData, setFormData] = useState<SignUpInterface>();
@@ -67,18 +67,21 @@ function SignUpForm() {
     <div className="signUpForm">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className=" w-full  md:w-8/12 max-w-lg mx-auto pt-44"
+        className=" w-full  md:w-8/12 max-w-lg mx-auto"
         action=""
       >
-        <Image
-          pt={{
-            image: {
-              className: "mx-auto w-20 mb-5",
-            },
-          }}
-          src="../images/LogoMusic.png"
-          alt="banda tocando"
-        />
+        <Link href="/">
+          <Image
+            pt={{
+              image: {
+                className: "mx-auto w-20 mb-5",
+              },
+            }}
+            src="../images/LogoMusic.png"
+            alt="banda tocando"
+          />
+        </Link>
+
         <h1 className="text-center text-white text-2xl mb-16 mt-16 font-semibold">
           Registrate
         </h1>
@@ -90,13 +93,17 @@ function SignUpForm() {
                 "text-white border-0 border-b  border-light-gray  outline-none bg-transparent rounded-none  py-2 w-full mb-5",
             },
           }}
-          {...register("name", { required: true })}
+          {...register("name", {
+            required: "Ingresa tus nombres",
+            pattern: /^[a-zA-Z0-9\s_-]*$/,
+          })}
           autoComplete="off"
         />
-        {errors.name && (
-          <p className="text-red-400 mb-4 text-light text-sm">
-            Ingresa tus nombres
-          </p>
+        {errors?.name?.type === "required" && (
+          <InputError error={errors?.name?.message} />
+        )}
+        {errors?.name?.type === "pattern" && (
+          <InputError error={"Solo se permiten letras y numeros"} />
         )}
         <InputText
           placeholder="Apellidos"
@@ -106,13 +113,17 @@ function SignUpForm() {
                 "text-white border-0 border-b  border-light-gray  outline-none bg-transparent rounded-none  py-2 w-full mb-5",
             },
           }}
-          {...register("lastname", { required: true })}
+          {...register("lastname", {
+            required: "Ingresa tus apellidos",
+            pattern: /^[a-zA-Z0-9\s_-]*$/,
+          })}
           autoComplete="off"
         />
-        {errors.lastname && (
-          <p className="text-red-400 mb-4 text-light text-sm">
-            Ingresa tus apellidos
-          </p>
+        {errors?.lastname?.type === "required" && (
+          <InputError error={errors?.lastname?.message} />
+        )}
+        {errors?.lastname?.type === "pattern" && (
+          <InputError error={"Solo se permiten letras y numeros"} />
         )}
         <InputText
           placeholder="Nombre de usuario"
@@ -123,14 +134,16 @@ function SignUpForm() {
             },
           }}
           {...register("nick", {
-            required: true,
+            required: "Ingresa tu nick",
+            pattern: /^[a-zA-Z0-9\s_-]*$/,
           })}
           autoComplete="off"
         />
-        {errors.nick && (
-          <p className="text-red-400 mb-4 text-light text-sm">
-            Ingresa tu nick
-          </p>
+        {errors?.nick?.type === "required" && (
+          <InputError error={errors?.nick?.message} />
+        )}
+        {errors?.nick?.type === "pattern" && (
+          <InputError error={"Solo se permiten letras y numeros"} />
         )}
         <InputText
           placeholder="Email"
@@ -141,26 +154,25 @@ function SignUpForm() {
             },
           }}
           {...register("email", {
-            required: true,
-            pattern: /^[^s@]+@[^s@]+.[^s@]+$/,
+            required: "Ingresa tu email",
+            pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$/,
           })}
           autoComplete="off"
         />
         {errors?.email?.type === "required" && (
-          <p className="text-red-400 mb-4 text-light text-sm">
-            Ingresa tu Email
-          </p>
+          <InputError error={errors?.email?.message} />
         )}
         {errors?.email?.type === "pattern" && (
-          <p className="text-red-400 mb-4 text-light text-sm">
-            Formato invalido
-          </p>
+          <InputError error={"Formato invalido"} />
         )}
 
         <Controller
           name="password"
           control={control}
-          rules={{ required: true }}
+          rules={{
+            required: "Ingresa tu contraseña",
+            pattern: /^(?=.*[a-zA-Z\d])[a-zA-Z\d*\-?]{5,}$/,
+          }}
           render={({ field }) => (
             <Password
               {...field}
@@ -172,7 +184,7 @@ function SignUpForm() {
                 },
                 input: {
                   className:
-                    "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-8",
+                    "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-5",
                 },
                 panel: {
                   className: "hidden",
@@ -182,15 +194,23 @@ function SignUpForm() {
           )}
         />
         {errors?.password?.type === "required" && (
-          <p className="text-red-400 mb-4 text-light text-sm">
-            Ingresa tu contraseña
-          </p>
+          <InputError error={errors?.password?.message} />
+        )}
+        {errors?.password?.type === "pattern" && (
+          <InputError
+            error={
+              "La contraseña debe tener minimo 5 caracteres incluyendo -?*"
+            }
+          />
         )}
 
         <Controller
           name="confirmPassword"
           control={control}
-          rules={{ required: true }}
+          rules={{
+            required: "Confirma tu contraseña",
+            pattern: /^(?=.*[a-zA-Z\d])[a-zA-Z\d*\-?]{5,}$/,
+          }}
           render={({ field }) => (
             <Password
               {...field}
@@ -202,7 +222,7 @@ function SignUpForm() {
                 },
                 input: {
                   className:
-                    "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-8",
+                    "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-5",
                 },
                 panel: {
                   className: "hidden",
@@ -212,27 +232,32 @@ function SignUpForm() {
           )}
         />
         {errors?.confirmPassword?.type === "required" && (
-          <p className="text-red-400 mb-4 text-light text-sm">
-            Confirma tu contraseña
-          </p>
+          <InputError error={errors.confirmPassword.message} />
         )}
         {confirmPasswordAlert && (
           <p className="text-red-400 mb-4 text-light text-sm">
             Las contrseñas no coincidem
           </p>
         )}
+        {errors?.confirmPassword?.type === "pattern" && (
+          <InputError
+            error={
+              " La contraseña debe tener minimo 5 caracteres incluyendo -?*"
+            }
+          />
+        )}
         <h1 className="bg-red">{confirmPasswordAlert}</h1>
         <Button
+          label="Enviar"
           pt={{
             root: {
               className:
-                "w-full bg-blue-400 border-0 rounded-0 px-5 py-3 text-center flex justify-center",
+                "w-full py-1 rounded-xl mt-4 bg-blue-400 border-0 rounded-0 px-5 text-center flex justify-center",
             },
             label: {
-              className: "border-0  text-white px-1",
+              className: "border-0  text-white ",
             },
           }}
-          label="Enviar"
         />
       </form>
     </div>

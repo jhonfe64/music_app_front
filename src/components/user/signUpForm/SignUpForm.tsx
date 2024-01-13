@@ -280,10 +280,10 @@ function SignUpForm() {
           pt={{
             root: {
               className:
-                "w-full py-1.5  mt-4 bg-blue-400 border-0 rounded-0 px-5 text-center flex justify-center",
+                "w-full py-1.5  mt-4 bg-soft-blue border-0 rounded-xl  px-5 text-center flex justify-center hover:bg-less-soft-blue",
             },
             label: {
-              className: "border-0 py-1 text-white ",
+              className: "border-0 py-1 text-black font-semibold ",
             },
           }}
         />

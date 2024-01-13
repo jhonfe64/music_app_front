@@ -10,9 +10,12 @@ const config: Config = {
     extend: {
       colors: {
         'soft-gray': '#e2e2da',
-        'soft-blue':'#a2b3cf',
-        'king-blue': '#7083AD',
-        'intermediate-blue': '#323663'
+        'dark-gray': '#697A98',
+        'dark-blue': '#19335a',
+        'king-blue': '#4675c0',
+        'less-soft-blue': "#70c0f1",
+        'soft-blue':'#8fc8eb',
+      
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

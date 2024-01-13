@@ -17,9 +17,10 @@ function Jumbotron() {
             label="Prueba ahora"
             pt={{
               root: {
-                className: "border-0 bg-blue-400  px-14 py-2",
+                className:
+                  "border-0 font-semibold  bg-soft-blue hover:bg-less-soft-blue rounded-xl  px-14 py-2",
               },
-              label: { className: "text-white text-base sm:text-xl" },
+              label: { className: "text-black text-base sm:text-xl" },
             }}
           />
         </div>

@@ -41,10 +41,10 @@ function Header() {
           </li>
           <li>
             <Link
-              className="text-white font-semibold border-0 bg-blue-400  px-7 py-[7px]"
+              className="text-black rounded-xl font-semibold border-0 bg-soft-blue hover:bg-less-soft-blue  px-7 py-[7px]"
               href="/user/signUp"
             >
-              <i className="pi pi-user-plus mr-5 "></i>
+              <i className="pi pi-user-plus mr-5  "></i>
               Registrate
             </Link>
           </li>

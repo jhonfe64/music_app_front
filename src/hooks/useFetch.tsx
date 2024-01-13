@@ -38,6 +38,7 @@ const useFetch = (
           console.log("error", error);
         }
       } finally {
+        
       }
     }
   };

@@ -12,10 +12,9 @@ import Link from "next/link";
 import { user } from "@/endpoints/user";
 import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
 import { ToastifyEnum } from "@/interfaces/common";
+import { useRouter } from "next/navigation";
 
-//mostrar el error usando la libreria
 //colocar el borde active
-//colocarle hover a los btns
 
 import "./signUpForm.css";
 
@@ -29,6 +28,7 @@ const initialFormData = {
 };
 
 function SignUpForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState<SignUpInterface>(initialFormData);
   const [formDataError, setFormDataError] = useState("");
   const [trigger, setTrigger] = useState(false);
@@ -80,6 +80,7 @@ function SignUpForm() {
       setTrigger(false);
       setFormDataError("");
       setFormData(initialFormData);
+      router.push("/user/login");
     }
   }, [data]);
 

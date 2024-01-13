@@ -8,6 +8,7 @@ const useFetch = (
 ): any => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [resetValues, setResetValues] = useState(false);
 
   const fetchData = async () => {
     if (trigger) {
@@ -34,14 +35,16 @@ const useFetch = (
         }
       } catch (error: any) {
         if (error) {
-          //setError(error);
+          console.log("error", error);
         }
+      } finally {
       }
     }
   };
+
   useEffect(() => {
     fetchData();
-  }, [url, trigger, type]);
+  }, [trigger]);
 
   return {
     data,

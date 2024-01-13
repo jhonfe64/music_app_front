@@ -11,6 +11,7 @@ import useFetch from "@/hooks/useFetch";
 import Link from "next/link";
 import { user } from "@/endpoints/user";
 import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
+import { ToastifyEnum } from "@/interfaces/common";
 
 //mostrar el error usando la libreria
 //colocar el borde active
@@ -18,8 +19,18 @@ import ToastifyNotification from "@/components/common/toastifyNotification/Toast
 
 import "./signUpForm.css";
 
+const initialFormData = {
+  name: "",
+  lastname: "",
+  nick: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
 function SignUpForm() {
-  const [formData, setFormData] = useState<SignUpInterface>();
+  const [formData, setFormData] = useState<SignUpInterface>(initialFormData);
+  const [formDataError, setFormDataError] = useState("");
   const [trigger, setTrigger] = useState(false);
   const [confirmPasswordAlert, setConfirmPasswordAlert] = useState(false);
 
@@ -40,6 +51,7 @@ function SignUpForm() {
         setTrigger(true);
       }
     }
+    setFormDataError("");
   };
 
   const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
@@ -65,8 +77,19 @@ function SignUpForm() {
   useEffect(() => {
     if (data?.status === "success" && data.user._id) {
       reset();
+      setTrigger(false);
+      setFormDataError("");
+      setFormData(initialFormData);
     }
   }, [data]);
+
+  useEffect(() => {
+    setTrigger(false);
+    setFormData(initialFormData);
+    if (error) {
+      setFormDataError(error.message);
+    }
+  }, [error]);
 
   return (
     <div className="signUpForm">
@@ -265,8 +288,11 @@ function SignUpForm() {
           }}
         />
       </form>
-      {error?.message && (
-        <ToastifyNotification message={error.message} type={"warning"} />
+      {formDataError?.length > 0 && (
+        <ToastifyNotification
+          message={error.message}
+          type={ToastifyEnum.error}
+        />
       )}
     </div>
   );

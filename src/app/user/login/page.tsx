@@ -1,10 +1,11 @@
 import React from "react";
+import LoginForm from "@/components/user/loginForm/LoginForm";
 
 function Login() {
   return (
-    <div className=" min-h-screen h-full felx  px-8 bg-black m-0 p-0">
+    <div className="min-h-screen h-full felx  px-8 m-0 p-0 bg-black">
       <div className="pt-16 sm:pt-44 pb-16">
-        <h1 className="text-white text-center">INICIAR SESION</h1>
+        <LoginForm />
       </div>
     </div>
   );

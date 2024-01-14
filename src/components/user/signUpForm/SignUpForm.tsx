@@ -14,8 +14,6 @@ import ToastifyNotification from "@/components/common/toastifyNotification/Toast
 import { ToastifyEnum } from "@/interfaces/common";
 import { useRouter } from "next/navigation";
 
-//colocar el borde active
-
 import "./signUpForm.css";
 
 const initialFormData = {

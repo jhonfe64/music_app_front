@@ -6,3 +6,8 @@ export interface SignUpInterface {
   password: string;
   confirmPassword?: string;
 }
+
+export interface LoginInterface {
+  email: string;
+  password: string;
+}

@@ -37,8 +37,6 @@ const useFetch = (
         if (error) {
           console.log("error", error);
         }
-      } finally {
-        
       }
     }
   };

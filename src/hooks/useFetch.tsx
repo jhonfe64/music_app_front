@@ -8,7 +8,6 @@ const useFetch = (
 ): any => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [resetValues, setResetValues] = useState(false);
 
   const fetchData = async () => {
     if (trigger) {
@@ -25,17 +24,19 @@ const useFetch = (
               "Content-type": "application/json; charset=UTF-8",
             },
           });
-          if (res.ok) {
-            const data = await res.json();
-            data && setData(data);
-          } else {
-            const data = await res.json();
-            data && setError(data);
+
+          if (!res.ok) {
+            const errorData = await res.json();
+            setError(errorData);
+            console.error(`Error en la solicitud (${res.status}):`, errorData);
+            throw new Error(`Error en la solicitud: ${res.status}`);
           }
+          const data = await res.json();
+          data && setData(data);
         }
       } catch (error: any) {
-        if (error) {
-          console.log("error", error);
+        if (error.message) {
+          console.log("error en la solicitud", error);
         }
       }
     }

@@ -76,7 +76,6 @@ function SignUpForm() {
     if (data?.status === "success" && data.user._id) {
       reset();
       setTrigger(false);
-      setFormDataError("");
       setFormData(initialFormData);
       router.push("/user/login");
     }
@@ -289,7 +288,7 @@ function SignUpForm() {
       </form>
       {formDataError?.length > 0 && (
         <ToastifyNotification
-          message={error.message}
+          message={formDataError}
           type={ToastifyEnum.error}
         />
       )}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { LoginInterface } from "@/interfaces/userInterfaces";
@@ -11,6 +11,8 @@ import { Button } from "primereact/button";
 import "./loginForm.css";
 import useFetch from "@/hooks/useFetch";
 import { user } from "@/endpoints/user";
+import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
+import { ToastifyEnum } from "@/interfaces/common";
 
 const initialFormData = {
   email: "",
@@ -19,29 +21,40 @@ const initialFormData = {
 
 function LoginForm() {
   const [formData, setFormData] = useState(initialFormData);
-  const [trigger, setTigger] = useState(false);
+  const [formDataError, setFormDataError] = useState("");
+  const [trigger, setTrigger] = useState(false);
 
   const {
     register,
     handleSubmit,
+    reset,
     control,
     formState: { errors },
   } = useForm<LoginInterface>();
 
-  const onSubmit = (data: LoginInterface) => {
+  const onSubmit: SubmitHandler<LoginInterface> = (data: LoginInterface) => {
     setFormData(data);
-    setTigger(true);
+    setTrigger(true);
+    setFormDataError("");
   };
 
-  // url: string,
-  // type: string,
-  // trigger: boolean,
-  // body: any
+  const { data, error } = useFetch(user.loginUser, "post", trigger, formData);
 
-  const { data, error } = useFetch(user.loginUser, "POST", true, formData);
+  useEffect(() => {
+    if (data?.token) {
+      setFormData(initialFormData);
+      setTrigger(false);
+      reset();
+    }
+  }, [data]);
 
-  console.log(data);
-  console.log(error);
+  useEffect(() => {
+    setTrigger(false);
+    setFormData(initialFormData);
+    if (error) {
+      setFormDataError(error.message);
+    }
+  }, [error]);
 
   return (
     <div className="loginForm">
@@ -64,6 +77,7 @@ function LoginForm() {
           Inicia sesión
         </h1>
         <InputText
+          autoComplete="off"
           placeholder="Email"
           {...register("email", { required: "Ingresa tu email" })}
           pt={{
@@ -127,6 +141,12 @@ function LoginForm() {
           }}
         />
       </form>
+      {formDataError?.length > 0 && (
+        <ToastifyNotification
+          message={formDataError}
+          type={ToastifyEnum.error}
+        />
+      )}
     </div>
   );
 }

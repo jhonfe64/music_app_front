@@ -84,7 +84,7 @@ function SignUpForm() {
       reset();
       setTrigger(false);
       setFormData(initialFormData);
-      router.push("/user/login");
+      router.push("/artist/login");
     }
   }, [data]);
 
@@ -97,10 +97,10 @@ function SignUpForm() {
   }, [error]);
 
   return (
-    <div className="signUpFor w-full md:max-w-xl">
+    <div className="w-full md:max-w-xl">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mx-auto p-14 md:p-8 bg-[rgba(0,0,0,.8)] rounded-2xl"
+        className="mx-auto p-8 bg-[rgba(0,0,0,.8)] rounded-2xl"
       >
         <Link href="/">
           <Image

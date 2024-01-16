@@ -6,20 +6,18 @@ import { Button } from "primereact/button";
 import { Image } from "primereact/image";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import InputError from "@/components/common/inputError/InputError";
-import { SignUpInterface } from "@/interfaces/userInterfaces";
+import { SignUpArtistInterface } from "@/interfaces/artistInterfaces";
 import useFetch from "@/hooks/useFetch";
 import Link from "next/link";
+import { artist } from "@/endpoints/artist";
 import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
 import { ToastifyEnum } from "@/interfaces/common";
 import { useRouter } from "next/navigation";
-import { user } from "../../../endpoints/user";
-
-import "./signUpForm.css";
 
 const initialFormData = {
   name: "",
   lastname: "",
-  nick: "",
+  artisticName: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -27,7 +25,8 @@ const initialFormData = {
 
 function SignUpForm() {
   const router = useRouter();
-  const [formData, setFormData] = useState<SignUpInterface>(initialFormData);
+  const [formData, setFormData] =
+    useState<SignUpArtistInterface>(initialFormData);
   const [formDataError, setFormDataError] = useState("");
   const [trigger, setTrigger] = useState(false);
   const [confirmPasswordAlert, setConfirmPasswordAlert] = useState(false);
@@ -39,9 +38,11 @@ function SignUpForm() {
     control,
     reset,
     formState: { errors },
-  } = useForm<SignUpInterface>();
+  } = useForm<SignUpArtistInterface>();
 
-  const onSubmit: SubmitHandler<SignUpInterface> = (data: SignUpInterface) => {
+  const onSubmit: SubmitHandler<SignUpArtistInterface> = (
+    data: SignUpArtistInterface
+  ) => {
     if (data) {
       if (data.password === data.confirmPassword) {
         delete data.confirmPassword;
@@ -52,7 +53,12 @@ function SignUpForm() {
     setFormDataError("");
   };
 
-  const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
+  const { data, error } = useFetch(
+    artist.signUpArtist,
+    "post",
+    trigger,
+    formData
+  );
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
@@ -73,7 +79,8 @@ function SignUpForm() {
   }, [password, confirmPassword]);
 
   useEffect(() => {
-    if (data?.status === "success" && data.user._id) {
+    console.log("data", data);
+    if (data?.status === "success" && data.artist._id) {
       reset();
       setTrigger(false);
       setFormData(initialFormData);
@@ -90,11 +97,10 @@ function SignUpForm() {
   }, [error]);
 
   return (
-    <div className="signUpForm">
+    <div className="signUpFor w-full md:max-w-xl">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className=" w-full  md:w-8/12 max-w-lg mx-auto"
-        action=""
+        className="mx-auto p-14 md:p-8 bg-[rgba(0,0,0,.8)] rounded-2xl"
       >
         <Link href="/">
           <Image
@@ -109,7 +115,7 @@ function SignUpForm() {
         </Link>
 
         <h1 className="text-center text-white text-2xl mb-16 mt-16 font-semibold">
-          Registrate
+          Registrate como artista
         </h1>
         <InputText
           placeholder="Nombres"
@@ -152,23 +158,23 @@ function SignUpForm() {
           <InputError error={"Solo se permiten letras y numeros"} />
         )}
         <InputText
-          placeholder="Nombre de usuario"
+          placeholder="Nombre artistico"
           pt={{
             root: {
               className:
                 "text-white border-0 border-b  border-light-gray  outline-none bg-transparent rounded-none  py-2 w-full mb-5",
             },
           }}
-          {...register("nick", {
-            required: "Ingresa tu nick",
+          {...register("artisticName", {
+            required: "Ingresa tu nombre artistico",
             pattern: /^[a-zA-Z0-9\s_-]*$/,
           })}
           autoComplete="off"
         />
-        {errors?.nick?.type === "required" && (
-          <InputError error={errors?.nick?.message} />
+        {errors?.artisticName?.type === "required" && (
+          <InputError error={errors?.artisticName?.message} />
         )}
-        {errors?.nick?.type === "pattern" && (
+        {errors?.artisticName?.type === "pattern" && (
           <InputError error={"Solo se permiten letras y numeros"} />
         )}
         <InputText
@@ -176,7 +182,7 @@ function SignUpForm() {
           pt={{
             root: {
               className:
-                "text-white border-0 border-b  border-light-gray  outline-none   rounded-none py-2 w-full mb-5 ",
+                "text-white bg-transparent border-0 border-b  border-light-gray  outline-none   rounded-none py-2 w-full mb-5 ",
             },
           }}
           {...register("email", {
@@ -202,15 +208,15 @@ function SignUpForm() {
           render={({ field }) => (
             <Password
               {...field}
-              placeholder="Ingresa tu contraseña"
+              placeholder="Contraseña"
               value={field.value ? field.value : ""}
               pt={{
                 root: {
-                  className: "w-full",
+                  className: "w-full bg-transparent",
                 },
                 input: {
                   className:
-                    "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-5",
+                    "text-white border-0 bg-transparent border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-5",
                 },
                 panel: {
                   className: "hidden",
@@ -248,7 +254,7 @@ function SignUpForm() {
                 },
                 input: {
                   className:
-                    "text-white border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-5",
+                    "text-white bg-transparent border-0 border-b  border-light-gray  outline-none   rounded-none  py-2 w-full mb-5",
                 },
                 panel: {
                   className: "hidden",

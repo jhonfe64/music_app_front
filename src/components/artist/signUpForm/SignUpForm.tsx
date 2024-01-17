@@ -79,7 +79,6 @@ function SignUpForm() {
   }, [password, confirmPassword]);
 
   useEffect(() => {
-    console.log("data", data);
     if (data?.status === "success" && data.artist._id) {
       reset();
       setTrigger(false);

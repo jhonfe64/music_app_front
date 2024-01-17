@@ -12,6 +12,7 @@ import useFetch from "@/hooks/useFetch";
 import { artist } from "@/endpoints/artist";
 import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
 import { ToastifyEnum } from "@/interfaces/common";
+import { useRouter } from "next/navigation";
 import "./loginForm.css";
 
 const initialFormData = {
@@ -20,6 +21,7 @@ const initialFormData = {
 };
 
 function LoginForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState(initialFormData);
   const [formDataError, setFormDataError] = useState("");
   const [trigger, setTrigger] = useState(false);
@@ -50,6 +52,7 @@ function LoginForm() {
       setFormData(initialFormData);
       setTrigger(false);
       reset();
+      router.push("/artist/dashboard");
     }
   }, [data]);
 

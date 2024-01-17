@@ -8,7 +8,7 @@ function ToastifyNotification({ message, type }: ToastifyInterface) {
     toast[type](message, {
       toastId: message, //para no repetir
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 4000,
       hideProgressBar: false,
       closeOnClick: false,
       pauseOnHover: false,

@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { Image } from "primereact/image";
+import { Button } from "primereact/button";
+import { signOut } from "next-auth/react";
 
 function DashboardLayout({ children }: any) {
   return (
@@ -100,6 +102,22 @@ function DashboardLayout({ children }: any) {
             </div>
             <nav className="flex items-center">
               <ul className="flex items-center">
+                <li className="mr-4">
+                  <Button
+                    // onClick={() => signOut()} //dividir esto en componentes
+                    //para q toda el layout no sea de cliente
+                    label="Salir"
+                    pt={{
+                      root: {
+                        className:
+                          "w-full  bg-soft-blue border-0 rounded-xl  px-7 text-center flex justify-center hover:bg-less-soft-blue -mt-1",
+                      },
+                      label: {
+                        className: "border-0 py-1 text-black font-semibold ",
+                      },
+                    }}
+                  />
+                </li>
                 <li className="text-lg">
                   <i className="pi pi-envelope pr-4 text-dark-gray relative">
                     <div className="w-5 text-xs h-5 bg-red-600 absolute right-2 -top-3 rounded-full flex justify-center items-center text-white">

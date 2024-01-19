@@ -1,15 +1,15 @@
+"use client";
 import React from "react";
-import Link from "next/link";
-import { Image } from "primereact/image";
+import { redirect } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+//aqui pedir la infomacion del usuario manadara  redux para
+//compartir con los otros componentes
 
 function Dashboard() {
-  return (
-    <div>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat est quis
-      magnam exercitationem hic maiores, nihil at a, ea ipsam aperiam! Excepturi
-      sapiente eveniet quam ut numquam culpa, sunt quasi?
-    </div>
-  );
+  const session = useSession();
+  const user: any = session?.data?.user;
+  const id = user?.userToken?.id;
+  id && id.length > 0 && redirect(`/artist/dashboard/profile/${id}`);
 }
 
 export default Dashboard;

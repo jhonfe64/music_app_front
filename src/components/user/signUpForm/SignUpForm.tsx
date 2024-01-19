@@ -111,6 +111,12 @@ function SignUpForm() {
         <h1 className="text-center text-white text-2xl mb-16 mt-16 font-semibold">
           Registrate
         </h1>
+        <div className="mb-8 flex justify-between">
+          <p className="text-dark-gray text-sm">Ya estas registrado?</p>
+          <Link href="/user/login" className="text-dark-gray text-sm">
+            Inicia sesion
+          </Link>
+        </div>
         <InputText
           placeholder="Nombres"
           pt={{

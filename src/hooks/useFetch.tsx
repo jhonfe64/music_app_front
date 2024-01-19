@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 const useFetch = (
   url: string,
   type: string,
   trigger: boolean,
-  body: any
+  body: any = null
 ): any => {
+  const { data: session, status } = useSession();
+
+  console.log("esta es la data de las session");
+
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -14,6 +19,13 @@ const useFetch = (
       try {
         if (type === "get") {
           const res = await fetch(url);
+
+          if (!res.ok) {
+            const errorData = await res.json();
+            setError(errorData);
+            console.error(`Error en la solicitud (${res.status}):`, errorData);
+            throw new Error(`Error en la solicitud: ${res.status}`);
+          }
           const data = await res.json();
           data && setData(data);
         } else if (type === "post") {

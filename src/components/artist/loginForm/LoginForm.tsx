@@ -13,6 +13,8 @@ import { artist } from "@/endpoints/artist";
 import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
 import { ToastifyEnum } from "@/interfaces/common";
 import { useRouter } from "next/navigation";
+import { signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import "./loginForm.css";
 
 const initialFormData = {
@@ -22,9 +24,12 @@ const initialFormData = {
 
 function LoginForm() {
   const router = useRouter();
-  const [formData, setFormData] = useState(initialFormData);
+  const { data: session, status } = useSession();
+  //const [sessionStatus, setSessionStatus] = useState(false);
+  //const [formData, setFormData] = useState(initialFormData);
   const [formDataError, setFormDataError] = useState("");
-  const [trigger, setTrigger] = useState(false);
+  //const [trigger, setTrigger] = useState(false);
+  //const [userId, setUserId] = useState("");
 
   const {
     register,
@@ -34,38 +39,52 @@ function LoginForm() {
     formState: { errors },
   } = useForm<LoginInterface>();
 
-  const onSubmit: SubmitHandler<LoginInterface> = (data: LoginInterface) => {
-    setFormData(data);
-    setTrigger(true);
+  const onSubmit: SubmitHandler<LoginInterface> = async (
+    data: LoginInterface
+  ) => {
+    //setFormData(data);
+    //setTrigger(true);
     setFormDataError("");
+
+    const result = await signIn("credentials", {
+      redirect: false, //para no redireccionard esde route.js
+      email: data.email,
+      password: data.password,
+      role: "artist",
+      //callbackUrl: `/artist/dashboard/profile/${session?.user?.id}`, //maneja con useState
+    });
+    if (!result?.error) {
+      router.push(`/artist/dashboard/`);
+      reset();
+    } else {
+      setFormDataError("Email o contraseña erroneos");
+    }
+
+    //result.error = null
   };
 
-  const { data, error } = useFetch(
-    artist.loginArtist,
-    "post",
-    trigger,
-    formData
-  );
+  //const { error } = useFetch(artist.loginArtist, "post", trigger, formData);
 
-  useEffect(() => {
-    if (data?.token) {
-      setFormData(initialFormData);
-      setTrigger(false);
-      reset();
-      router.push("/artist/dashboard");
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data?.token) {
+  //     setFormData(initialFormData);
+  //     setTrigger(false);
+  //     reset();
+  //     //router.push(`/artist/dashboard/profile/${data.id}`);
+  //   }
+  // }, [data]);
 
-  useEffect(() => {
-    setTrigger(false);
-    setFormData(initialFormData);
-    if (error) {
-      setFormDataError(error.message);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   setTrigger(false);
+  //   setFormData(initialFormData);
+  //   if (error) {
+  //     setFormDataError(error.message);
+  //   }
+  // }, [error]);
 
   return (
     <div className="artistLoginForm">
+      <Button onClick={() => signOut()} className="text-white" label="salir" />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className=" w-full  md:w-8/12 max-w-lg mx-auto"
@@ -147,7 +166,9 @@ function LoginForm() {
               className: "border-0 py-1 text-black font-semibold ",
             },
           }}
-        />
+        >
+          {!session && status !== "loading" && <p>Cargando00</p>}
+        </Button>
       </form>
       {formDataError?.length > 0 && (
         <ToastifyNotification

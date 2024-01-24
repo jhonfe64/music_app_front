@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useSession } from "next-auth/react";
 
 const useFetch = (
@@ -9,8 +9,6 @@ const useFetch = (
 ): any => {
   const { data: session, status } = useSession();
 
-  console.log("esta es la data de las session");
-
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -18,7 +16,13 @@ const useFetch = (
     if (trigger) {
       try {
         if (type === "get") {
-          const res = await fetch(url);
+          const res = await fetch(url, {
+            method: "get",
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+              Authorization: session?.user?.token,
+            },
+          });
 
           if (!res.ok) {
             const errorData = await res.json();

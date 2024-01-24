@@ -17,19 +17,10 @@ import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import "./loginForm.css";
 
-const initialFormData = {
-  email: "",
-  password: "",
-};
-
 function LoginForm() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  //const [sessionStatus, setSessionStatus] = useState(false);
-  //const [formData, setFormData] = useState(initialFormData);
   const [formDataError, setFormDataError] = useState("");
-  //const [trigger, setTrigger] = useState(false);
-  //const [userId, setUserId] = useState("");
 
   const {
     register,
@@ -42,16 +33,12 @@ function LoginForm() {
   const onSubmit: SubmitHandler<LoginInterface> = async (
     data: LoginInterface
   ) => {
-    //setFormData(data);
-    //setTrigger(true);
     setFormDataError("");
-
     const result = await signIn("credentials", {
-      redirect: false, //para no redireccionard esde route.js
+      redirect: false, 
       email: data.email,
       password: data.password,
-      role: "artist",
-      //callbackUrl: `/artist/dashboard/profile/${session?.user?.id}`, //maneja con useState
+      role: "artist" as string,
     });
     if (!result?.error) {
       router.push(`/artist/dashboard/`);
@@ -59,28 +46,7 @@ function LoginForm() {
     } else {
       setFormDataError("Email o contraseña erroneos");
     }
-
-    //result.error = null
   };
-
-  //const { error } = useFetch(artist.loginArtist, "post", trigger, formData);
-
-  // useEffect(() => {
-  //   if (data?.token) {
-  //     setFormData(initialFormData);
-  //     setTrigger(false);
-  //     reset();
-  //     //router.push(`/artist/dashboard/profile/${data.id}`);
-  //   }
-  // }, [data]);
-
-  // useEffect(() => {
-  //   setTrigger(false);
-  //   setFormData(initialFormData);
-  //   if (error) {
-  //     setFormDataError(error.message);
-  //   }
-  // }, [error]);
 
   return (
     <div className="artistLoginForm">

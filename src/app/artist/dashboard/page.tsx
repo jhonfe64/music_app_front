@@ -7,9 +7,8 @@ import { signOut, useSession } from "next-auth/react";
 
 function Dashboard() {
   const session = useSession();
-  const user: any = session?.data?.user;
-  const id = user?.userToken?.id;
-  id && id.length > 0 && redirect(`/artist/dashboard/profile/${id}`);
+
+  session && redirect(`/artist/dashboard/profile`);
 }
 
 export default Dashboard;

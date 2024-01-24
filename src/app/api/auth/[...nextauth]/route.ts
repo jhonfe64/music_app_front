@@ -1,13 +1,20 @@
 import NextAuth from "next-auth";
 import { artist } from "@/endpoints/artist";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { UserToken } from "@/interfaces/userInterfaces";
+import { UserSession } from "@/interfaces/userInterfaces";
+import { NextApiRequest } from "next";
+import { User } from "next-auth";
+
+
 
 export const handler = NextAuth({
   session: { strategy: "jwt" },
 
+
   providers: [
     CredentialsProvider({
-      async authorize(credentials, req) {
+      async authorize(credentials:any, req: NextApiRequest)  {
         try {
           //credentials.role === "artist" &&
           const res = await fetch(artist.loginArtist, {
@@ -22,14 +29,14 @@ export const handler = NextAuth({
           const user = await res.json();
 
           if (res.ok && user) {
-            return user;
+            return user as UserToken
           } else {
             return null;
           }
         } catch (error) {
           return error;
         }
-      },
+      } ,
     }),
   ],
   pages: {
@@ -39,12 +46,13 @@ export const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.userToken = user;
+        token.userToken = user as UserToken;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.userToken = token.userToken;
+      const t = token.userToken
+      session.user = t as UserSession
       return session;
     },
   },

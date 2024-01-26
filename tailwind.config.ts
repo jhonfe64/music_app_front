@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'soft-gray': '#e2e2da',
+        'soft-gray': '#ecf0f1',
         'dark-gray': '#697A98',
         'dark-blue': '#19335a',
         'king-blue': '#4675c0',

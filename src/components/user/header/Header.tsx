@@ -7,11 +7,7 @@ function Header() {
   return (
     <header className="flex bg-black justify-between items-center p-4 sm:p-8 py-5 fixed right-0 left-0 top-0 z-50">
       <div className="logo w-20">
-        <Image
-          src="./images/LogoMusic.png"
-          className="w-100 border"
-          alt="logo"
-        />
+        <Image src="./images/LogoMusic.png" className="w-100" alt="logo" />
       </div>
       <nav>
         <ul className="items-center text-white hidden sm:flex">

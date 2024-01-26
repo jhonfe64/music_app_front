@@ -11,3 +11,8 @@ export interface LoginArtistInterface {
   email: string;
   password: string;
 }
+
+export interface LoggedUserInterface
+  extends Omit<SignUpArtistInterface, "password" | "confirmPassword"> {
+  image: string;
+}

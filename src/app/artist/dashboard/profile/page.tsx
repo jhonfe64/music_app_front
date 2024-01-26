@@ -1,26 +1,13 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import useFetch from "@/hooks/useFetch";
-import { artist } from "@/endpoints/artist";
-import { useSession } from "next-auth/react";
+import React from "react";
+import ProfileInfo from "@/components/artist/profileInfo/ProfileInfo";
 
 function Profile() {
-  const { data: session, status } = useSession();
-  const [trigger, setTrigger] = useState(false);
-
-  useEffect(() => {
-    if (session) {
-      setTrigger(true);
-    }
-  }, [session]);
-
-  const { data, error } = useFetch(
-    artist.singleArtist,
-    "get",
-    status === "authenticated" && true
+  return (
+    <>
+      <h1 className="font-semibold text-xl mt-8 mb-8">Perfil</h1>
+      <ProfileInfo />
+    </>
   );
-
-  return <div>{data?.artist?.name}</div>;
 }
 
 export default Profile;

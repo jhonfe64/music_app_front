@@ -35,7 +35,7 @@ function LoginForm() {
   ) => {
     setFormDataError("");
     const result = await signIn("credentials", {
-      redirect: false, 
+      redirect: false,
       email: data.email,
       password: data.password,
       role: "artist" as string,

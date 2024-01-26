@@ -9,11 +9,17 @@ import { SessionProvider } from "next-auth/react";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    // <Provider store={store}>
-    <PrimeReactProvider value={{ unstyled: true, pt: Tailwind }}>
-      <SessionProvider>{children}</SessionProvider>
-    </PrimeReactProvider>
-    // </Provider>
+    <Provider store={store}>
+      <PrimeReactProvider
+        value={{
+          unstyled: false,
+          pt: {},
+          ptOptions: { mergeSections: true, mergeProps: true },
+        }}
+      >
+        <SessionProvider>{children}</SessionProvider>
+      </PrimeReactProvider>
+    </Provider>
   );
 };
 

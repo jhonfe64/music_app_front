@@ -17,7 +17,7 @@ export const handler = NextAuth({
       async authorize(credentials:any, req: NextApiRequest)  {
         try {
           //credentials.role === "artist" &&
-          const res = await fetch(artist.loginArtist, {
+          const res = await fetch(artist.LOGIN_ARTIST, {
             method: "POST",
             body: JSON.stringify({
               email: credentials.email,

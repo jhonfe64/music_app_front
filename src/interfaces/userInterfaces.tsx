@@ -1,5 +1,3 @@
-import { User } from "next-auth";
-
 export interface SignUpInterface {
   name: string;
   lastname: string;
@@ -32,16 +30,6 @@ export interface UserSession {
   token: string;
 }
 
-export interface InitialFullUserInterface {
-  artisticName: string;
-  created_at: string;
-  email: string;
-  image: string;
-  lastname: string;
-  name: string;
-  role: string;
-  _id: string;
-}
 
 //https://reacthustle.com/blog/extend-user-session-nextauth-typescript
 //https://chat.openai.com/c/336fdc80-25f5-48ca-94c5-dec73ec69335

@@ -54,7 +54,7 @@ function SignUpForm() {
   };
 
   const { data, error } = useFetch(
-    artist.signUpArtist,
+    artist.SIGN_UP_ARTIST,
     "post",
     trigger,
     formData

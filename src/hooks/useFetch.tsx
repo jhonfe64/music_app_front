@@ -38,6 +38,25 @@ const useFetch = (
             body: JSON.stringify(body),
             headers: {
               "Content-type": "application/json; charset=UTF-8",
+              Authorization: session?.user?.token,
+            },
+          });
+
+          if (!res.ok) {
+            const errorData = await res.json();
+            setError(errorData);
+            console.error(`Error en la solicitud (${res.status}):`, errorData);
+            throw new Error(`Error en la solicitud: ${res.status}`);
+          }
+          const data = await res.json();
+          data && setData(data);
+        } else if (type === "put") {
+          const res = await fetch(url, {
+            method: "PUT",
+            body: JSON.stringify(body),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+              Authorization: session?.user?.token,
             },
           });
 
@@ -57,7 +76,6 @@ const useFetch = (
       }
     }
   };
-
   useEffect(() => {
     fetchData();
   }, [trigger]);

@@ -12,7 +12,20 @@ export interface LoginArtistInterface {
   password: string;
 }
 
-export interface LoggedUserInterface
-  extends Omit<SignUpArtistInterface, "password" | "confirmPassword"> {
+export interface ArtistInterface {
+  artisticName: string;
+  created_at: string;
+  email: string;
   image: string;
+  lastname: string;
+  name: string;
+  role: string;
+  _id: string;
+}
+
+export interface UpdateArtistInterface {
+  artisticName: string;
+  name: string;
+  lastname: string;
+  email: string;
 }

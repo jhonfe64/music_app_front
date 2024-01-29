@@ -12,7 +12,7 @@ export default function artistReducer(
     case "LOGGED_USER":
       return {
         ...state,
-        loggeduser: action.payload,
+        loggedUser: action.payload,
       };
     default:
       return state;

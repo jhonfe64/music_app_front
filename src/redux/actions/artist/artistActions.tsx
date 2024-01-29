@@ -1,11 +1,12 @@
-const LOGGED_USER = "LOGGED_USER";
-import { LoggedUserInterface } from "@/interfaces/artistInterfaces";
+import { ArtistInterface } from "@/interfaces/artistInterfaces";
 
-const loggedUser = (user: LoggedUserInterface) => {
+const LOGGED_USER = "LOGGED_USER";
+
+const loggedUserAction = (user: ArtistInterface) => {
   return {
     type: LOGGED_USER,
     payload: user,
   };
 };
 
-export default { loggedUser };
+export { loggedUserAction };

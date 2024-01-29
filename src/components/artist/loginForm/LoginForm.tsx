@@ -8,8 +8,6 @@ import InputError from "@/components/common/inputError/InputError";
 import Link from "next/link";
 import { Image } from "primereact/image";
 import { Button } from "primereact/button";
-import useFetch from "@/hooks/useFetch";
-import { artist } from "@/endpoints/artist";
 import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
 import { ToastifyEnum } from "@/interfaces/common";
 import { useRouter } from "next/navigation";

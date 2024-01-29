@@ -2,13 +2,12 @@ import React from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 
-
 function RestorePassword() {
   return (
     <>
       <form className="mt-8">
         <label htmlFor="password" className="text-sm block mb-2 font-semibold">
-          * Nueva contraseña
+          <span className="text-red-400">*</span> Nueva contraseña
         </label>
         <InputText
           autoComplete="off"
@@ -24,7 +23,7 @@ function RestorePassword() {
           htmlFor="confirmPassword"
           className="text-sm block mb-2 font-semibold"
         >
-          * Confirmar contraseña
+          <span className="text-red-400">*</span> Confirmar contraseña
         </label>
         <InputText
           autoComplete="off"

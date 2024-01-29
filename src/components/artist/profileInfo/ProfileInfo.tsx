@@ -5,8 +5,10 @@ import EditProfile from "../editprofile/EditProfile";
 import RestorePassword from "../restorePassword/RestorePassword";
 import { artist } from "@/endpoints/artist";
 import { useSession } from "next-auth/react";
-import { InitialFullUserInterface } from "@/interfaces/userInterfaces";
+import { ArtistInterface } from "@/interfaces/artistInterfaces";
 import useFetch from "@/hooks/useFetch";
+import { loggedUserAction } from "@/redux/actions/artist/artistActions";
+import { useDispatch } from "react-redux";
 
 const initialFullUser = {
   artisticName: "",
@@ -20,26 +22,30 @@ const initialFullUser = {
 };
 
 function ProfileInfo() {
-  const { data: session, status } = useSession();
+  const dispatch = useDispatch();
+  const { status } = useSession();
+
   const [profielData, setProfileData] =
-    useState<InitialFullUserInterface>(initialFullUser);
+    useState<ArtistInterface>(initialFullUser);
 
   const { data, error } = useFetch(
-    artist.singleArtist,
+    artist.SINGLE_ARTIST,
     "get",
     status === "authenticated" ? true : false
   );
 
   useEffect(() => {
     if (data) {
-      console.log("data", data);
       setProfileData(data.artist);
     }
   }, [data]);
 
+  useEffect(() => {
+    dispatch(loggedUserAction(profielData));
+  }, [profielData]);
+
   return (
     <div className="card mt-8">
-      <div>{data?.artist?.name}</div>
       <Accordion activeIndex={0}>
         <AccordionTab
           header="Información básica"

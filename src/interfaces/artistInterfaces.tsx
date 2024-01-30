@@ -29,3 +29,8 @@ export interface UpdateArtistInterface {
   lastname: string;
   email: string;
 }
+
+export interface UpdatePasswordInterface {
+  password: string;
+  confirmPassword?: string;
+}

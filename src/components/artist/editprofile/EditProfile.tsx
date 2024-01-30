@@ -60,8 +60,6 @@ function EditProfile() {
     editprofileData
   );
 
-  console.log("este es ele rror", error);
-
   useEffect(() => {
     setTrigger(false);
     setEditProfileData(initialFormData);

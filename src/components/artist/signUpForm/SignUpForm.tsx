@@ -266,9 +266,7 @@ function SignUpForm() {
           <InputError error={errors.confirmPassword.message} />
         )}
         {confirmPasswordAlert && (
-          <p className="text-red-400 mb-4 text-light text-sm">
-            Las contrseñas no coinciden
-          </p>
+          <InputError error="Las contraseñas no coinciden" />
         )}
         {errors?.confirmPassword?.type === "pattern" && (
           <InputError

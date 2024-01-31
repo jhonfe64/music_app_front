@@ -61,7 +61,7 @@ function ProfileInfo() {
                   "border border-slate-200 rounded-lg  ease-in-out ease-in duration-300 mb-4 transition overflow-hidden",
               },
               header: {
-                className: "bg-slate-50 p-4 font-semibold",
+                className: "bg-slate-100 p-4 font-semibold",
               },
               content: {
                 className: "p-4",
@@ -83,7 +83,7 @@ function ProfileInfo() {
                   "border border-slate-200 rounded-lg  ease-in-out ease-in duration-300 mb-4 transition overflow-hidden",
               },
               header: {
-                className: "bg-slate-50 p-4 font-semibold",
+                className: "bg-slate-100 p-4 font-semibold",
               },
               content: {
                 className: "p-4",

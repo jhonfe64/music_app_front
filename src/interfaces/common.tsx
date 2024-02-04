@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export enum ToastifyEnum {
   info = "info",
   warning = "warning",
@@ -8,4 +10,8 @@ export enum ToastifyEnum {
 export interface ToastifyInterface {
   type: ToastifyEnum;
   message: string;
+}
+
+export interface LayoutInterface {
+  children: ReactNode;
 }

@@ -2,9 +2,9 @@ import React from "react";
 import Link from "next/link";
 import { Image } from "primereact/image";
 import { Button } from "primereact/button";
-import { signOut } from "next-auth/react";
+import { LayoutInterface } from "@/interfaces/common";
 
-function DashboardLayout({ children }: any) {
+function DashboardLayout({ children }: LayoutInterface) {
   return (
     <div>
       <div className="grid grid-cols-12">

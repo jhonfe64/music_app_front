@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { Suspense } from "react";
-import Loading from "@/app/artist/dashboard/profile/Loading";
+import Loading from "@/app/artist/dashboard/profile/loading";
 
 const EditProfile = React.lazy(() => import("../editprofile/EditProfile"));
 // import EditProfile from "../editprofile/EditProfile";

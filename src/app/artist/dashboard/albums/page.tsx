@@ -17,14 +17,14 @@ function Albums() {
           pt={{
             root: {
               className:
-                "bg-soft-blue border-0 rounded-xl  px-7 text-center flex justify-center hover:bg-less-soft-blue -mt-1",
+                "bg-soft-blue border-0 rounded-xl  px-7 text-center flex justify-center items-center hover:bg-less-soft-blue -mt-1",
             },
             label: {
               className: "border-0 py-1 text-black font-semibold ",
             },
           }}
         >
-          <span className="text-sm ml-3">
+          <span className="pl-4">
             <i className="pi pi-plus"></i>
           </span>
         </Button>

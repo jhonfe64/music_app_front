@@ -6,4 +6,8 @@ const artist = {
   UPDATE_PASSWORD: `${process.env.NEXT_PUBLIC_API_URL}/artist/password`,
 };
 
-export { artist };
+const album = {
+  MUSIC_GENDRES: `${process.env.NEXT_PUBLIC_API_URL}/album/music-gendres`,
+};
+
+export { artist, album };

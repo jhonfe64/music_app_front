@@ -52,7 +52,12 @@ function SignUpForm() {
     setFormDataError("");
   };
 
-  const { data, error } = useFetch(user.signUpUser, "post", trigger, formData);
+  const { data, error } = useFetch(
+    user.SIGN_UP_USER,
+    "post",
+    trigger,
+    formData
+  );
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");

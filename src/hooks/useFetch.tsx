@@ -78,7 +78,7 @@ const useFetch = (
   };
   useEffect(() => {
     fetchData();
-  }, [trigger]);
+  }, [trigger, session, url]);
 
   return {
     data,

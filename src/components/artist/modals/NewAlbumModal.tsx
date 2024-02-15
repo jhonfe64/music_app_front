@@ -1,19 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import { addLocale } from "primereact/api";
 import { Dropdown } from "primereact/dropdown";
+import useFetch from "@/hooks/useFetch";
+import { album } from "@/endpoints/artist";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 function NewAlbumModal({
   visibility,
   setVisibility,
 }: {
-  visibility: any;
+  visibility: boolean;
   setVisibility: any;
 }) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<any>();
+
+  const onSubmit: SubmitHandler<any> = (data) => console.log(data);
+
   const [date, setDate] = useState(null);
+  const [trigger, setTrigger] = useState(false);
+
+  useEffect(() => {
+    if (visibility) {
+      setTrigger(true);
+    }
+  }, [visibility]);
+
+  const { data, error } = useFetch(album.MUSIC_GENDRES, "get", trigger);
 
   let today = new Date();
   let month = today.getMonth();
@@ -47,7 +68,7 @@ function NewAlbumModal({
           visible={visibility}
           onHide={() => setVisibility(false)}
         >
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full">
               <label
                 htmlFor="artisticName"
@@ -56,10 +77,10 @@ function NewAlbumModal({
                 <span className="text-red-400">*</span> Titulo
               </label>
               <InputText
-                //   {...register("artisticName", {
-                //     required: "Ingresa tu nombre artistico",
-                //     pattern: /^[a-zA-Z0-9\s_-]*$/,
-                //   })}
+                {...register("title", {
+                  required: "Ingresa el titulo del album",
+                  pattern: /^[a-zA-Z0-9\s_-]*$/,
+                })}
                 autoComplete="off"
                 id="artisticName"
                 pt={{
@@ -76,10 +97,10 @@ function NewAlbumModal({
                 <span className="text-red-400">*</span> Descripcion
               </label>
               <InputText
-                //   {...register("artisticName", {
-                //     required: "Ingresa tu nombre artistico",
-                //     pattern: /^[a-zA-Z0-9\s_-]*$/,
-                //   })}
+                {...register("description", {
+                  required: "Ingresa la descripciòn del album",
+                  pattern: /^[a-zA-Z0-9\s_-]*$/,
+                })}
                 autoComplete="off"
                 id="artisticName"
                 pt={{
@@ -131,7 +152,7 @@ function NewAlbumModal({
                   <span className="text-red-400">*</span> Genero musical
                 </label>
                 <Dropdown
-                  options={[{ name: "New york" }]}
+                  options={data && data.gendres}
                   optionLabel="name"
                   className="w-full md:w-14rem"
                   pt={{

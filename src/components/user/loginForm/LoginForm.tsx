@@ -38,7 +38,7 @@ function LoginForm() {
     setFormDataError("");
   };
 
-  const { data, error } = useFetch(user.loginUser, "post", trigger, formData);
+  const { data, error } = useFetch(user.LOGIN_USER, "post", trigger, formData);
 
   useEffect(() => {
     if (data?.token) {

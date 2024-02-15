@@ -3,7 +3,10 @@ import React from "react";
 import { useState } from "react";
 import AlbumsList from "@/components/artist/albumsList/AlbumsList";
 import { Button } from "primereact/button";
-import NewAlbumModal from "@/components/artist/modals/NewAlbumModal";
+//import NewAlbumModal from "@/components/artist/modals/NewAlbumModal";
+const NewAlbumModal = React.lazy(
+  () => import("@/components/artist/modals/NewAlbumModal")
+);
 
 function Albums() {
   const [visibility, setVisibility] = useState(false);

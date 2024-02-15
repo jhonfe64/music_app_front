@@ -5,11 +5,9 @@ import { Suspense } from "react";
 import Loading from "@/app/artist/dashboard/profile/loading";
 
 const EditProfile = React.lazy(() => import("../editprofile/EditProfile"));
-// import EditProfile from "../editprofile/EditProfile";
 import RestorePassword from "../restorePassword/RestorePassword";
 
 import { artist } from "@/endpoints/artist";
-import { useSession } from "next-auth/react";
 import { ArtistInterface } from "@/interfaces/artistInterfaces";
 import useFetch from "@/hooks/useFetch";
 import { loggedUserAction } from "@/redux/actions/artist/artistActions";
@@ -28,16 +26,11 @@ const initialFullUser = {
 
 function ProfileInfo() {
   const dispatch = useDispatch();
-  const { status } = useSession();
 
   const [profielData, setProfileData] =
     useState<ArtistInterface>(initialFullUser);
 
-  const { data, error } = useFetch(
-    artist.SINGLE_ARTIST,
-    "get",
-    status === "authenticated" ? true : false
-  );
+  const { data, error } = useFetch(artist.SINGLE_ARTIST, "get", true);
 
   useEffect(() => {
     if (data) {

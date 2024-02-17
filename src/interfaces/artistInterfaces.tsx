@@ -34,3 +34,11 @@ export interface UpdatePasswordInterface {
   password: string;
   confirmPassword?: string;
 }
+
+export interface NewAlbumInterface {
+  artist: string;
+  title: string;
+  description: string;
+  year: string;
+  gendre: string;
+}

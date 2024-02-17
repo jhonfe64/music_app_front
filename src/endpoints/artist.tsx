@@ -8,6 +8,7 @@ const artist = {
 
 const album = {
   MUSIC_GENDRES: `${process.env.NEXT_PUBLIC_API_URL}/album/music-gendres`,
+  CREATE_ABUM: `${process.env.NEXT_PUBLIC_API_URL}/album/upload`
 };
 
 export { artist, album };

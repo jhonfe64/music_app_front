@@ -8,6 +8,17 @@ import { Dropdown } from "primereact/dropdown";
 import useFetch from "@/hooks/useFetch";
 import { album } from "@/endpoints/artist";
 import { useForm, SubmitHandler } from "react-hook-form";
+import InputError from "@/components/common/inputError/InputError";
+import { NewAlbumInterface } from "@/interfaces/artistInterfaces";
+import { useSession } from "next-auth/react";
+
+const newAlbumInitial = {
+  artist: "",
+  title: "",
+  description: "",
+  year: "",
+  gendre: "",
+};
 
 function NewAlbumModal({
   visibility,
@@ -20,13 +31,28 @@ function NewAlbumModal({
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
-  } = useForm<any>();
+  } = useForm<NewAlbumInterface>();
 
-  const onSubmit: SubmitHandler<any> = (data) => console.log(data);
+  const { data: session, status } = useSession();
 
-  const [date, setDate] = useState(null);
   const [trigger, setTrigger] = useState(false);
+  const [formTrigger, setFormTrigger] = useState(false);
+  const [albumToSave, setAlbumToSave] =
+    useState<NewAlbumInterface>(newAlbumInitial);
+  const [selectedGendre, setSelectedGendre] = useState("");
+
+  const onSubmit: SubmitHandler<NewAlbumInterface> = (data) => {
+    if (data) {
+      setFormTrigger(true);
+      const date = new Date(data.year);
+      const year = date.getFullYear();
+      data["year"] = JSON.stringify(year);
+      data["artist"] = session?.user?.id;
+      setAlbumToSave(data);
+    }
+  };
 
   useEffect(() => {
     if (visibility) {
@@ -34,6 +60,7 @@ function NewAlbumModal({
     }
   }, [visibility]);
 
+  //para obtener los generos musicales
   const { data, error } = useFetch(album.MUSIC_GENDRES, "get", trigger);
 
   let today = new Date();
@@ -44,6 +71,27 @@ function NewAlbumModal({
   let maxDate = new Date();
   maxDate.setMonth(nextMonth);
   maxDate.setFullYear(nextYear);
+
+  //para guardar el nuevo album
+  const { data: albumData, error: albumError } = useFetch(
+    album.CREATE_ABUM,
+    "post",
+    formTrigger,
+    albumToSave
+  );
+
+  useEffect(() => {
+    if (albumData) {
+      setFormTrigger(false);
+      setAlbumToSave(newAlbumInitial);
+      reset();
+      setSelectedGendre("");
+    }
+  }, [albumData]);
+
+  console.log("el suaurio guardado", albumData);
+  console.log("trigger", formTrigger);
+  console.log("alBumData", albumData);
 
   addLocale("es", {
     clear: "Limpiar",
@@ -90,6 +138,13 @@ function NewAlbumModal({
                   },
                 }}
               />
+              {errors?.title?.type === "required" && (
+                <InputError error={errors?.title?.message} />
+              )}
+              {errors?.title?.type === "pattern" && (
+                <InputError error={"Solo se permiten letras o numeros"} />
+              )}
+
               <label
                 htmlFor="artisticName"
                 className="text-sm block mb-2 font-semibold"
@@ -110,6 +165,12 @@ function NewAlbumModal({
                   },
                 }}
               />
+              {errors?.description?.type === "required" && (
+                <InputError error={errors?.description?.message} />
+              )}
+              {errors?.description?.type === "pattern" && (
+                <InputError error={"Solo se permiten letras o numeros"} />
+              )}
               <div className="card  justify-content-center">
                 <label
                   htmlFor="artisticName"
@@ -118,6 +179,9 @@ function NewAlbumModal({
                   <span className="text-red-400">*</span> Año de lanzamiento
                 </label>
                 <Calendar
+                  {...register("year", {
+                    required: "Selecciona el año de lanzamiento de tu album",
+                  })}
                   pt={{
                     input: {
                       root: {
@@ -129,7 +193,8 @@ function NewAlbumModal({
                       className: "outline-none w-full block",
                     },
                     panel: {
-                      className: "bg-white p-4 rounded-lg shadow-sm",
+                      className:
+                        "bg-white p-4 rounded-lg border-t-0  border  border-slate-200",
                     },
                     group: {
                       className: "border-b border-indigo-50 pb-2",
@@ -143,6 +208,9 @@ function NewAlbumModal({
                   maxDate={maxDate}
                   dateFormat="yy"
                 />
+                {errors?.year?.type === "required" && (
+                  <InputError error={errors?.year?.message} />
+                )}
               </div>
               <div>
                 <label
@@ -152,16 +220,31 @@ function NewAlbumModal({
                   <span className="text-red-400">*</span> Genero musical
                 </label>
                 <Dropdown
-                  options={data && data.gendres}
+                  {...register("gendre", {
+                    required: "Selecciona el genero musical",
+                  })}
+                  options={data?.gendres}
                   optionLabel="name"
                   className="w-full md:w-14rem"
+                  value={selectedGendre}
+                  onChange={(e) => setSelectedGendre(e.value)}
                   pt={{
                     root: {
                       className:
                         "outline-none border border-slate-200 rounded-lg  py-2 w-full mb-5 px-4",
                     },
+                    panel: {
+                      className:
+                        "bg-white p-4 rounded-lg border-t-0  border  border-slate-200",
+                    },
+                    item: {
+                      className: "mb-2",
+                    },
                   }}
                 />
+                {errors?.gendre?.type === "required" && (
+                  <InputError error={errors?.gendre?.message} />
+                )}
               </div>
             </div>
             <div className="flex justify-end">

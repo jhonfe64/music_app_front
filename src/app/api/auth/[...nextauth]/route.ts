@@ -1,20 +1,16 @@
 import NextAuth from "next-auth";
 import { artist } from "@/endpoints/artist";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { UserToken } from "@/interfaces/userInterfaces";
-import { UserSession } from "@/interfaces/userInterfaces";
+import { UserSessionInterface } from "@/interfaces/userInterfaces";
 import { NextApiRequest } from "next";
-import { User } from "next-auth";
-
-
+import { UserToken } from "@/interfaces/userInterfaces";
+import { Session } from "next-auth";
 
 export const handler = NextAuth({
   session: { strategy: "jwt" },
-
-
   providers: [
     CredentialsProvider({
-      async authorize(credentials:any, req: NextApiRequest)  {
+      async authorize(credentials: any, req: NextApiRequest) {
         try {
           //credentials.role === "artist" &&
           const res = await fetch(artist.LOGIN_ARTIST, {
@@ -36,7 +32,7 @@ export const handler = NextAuth({
         } catch (error) {
           return error;
         }
-      } ,
+      },
     }),
   ],
   pages: {
@@ -51,11 +47,21 @@ export const handler = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      const t = token.userToken
-      session.user = t as UserSession
+      const t: any = token.userToken
+      delete t?.name
+      delete t?.email
+      session = {
+        ...session,
+        user: {
+          ...session?.user,
+          ...t
+        }
+      }
       return session;
     },
   },
 });
 
 export { handler as GET, handler as POST };
+
+//https://next-auth.js.org/v3/getting-started/typescript

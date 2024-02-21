@@ -11,6 +11,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import InputError from "@/components/common/inputError/InputError";
 import { NewAlbumInterface } from "@/interfaces/artistInterfaces";
 import { useSession } from "next-auth/react";
+import { UserSessionInterface } from "@/interfaces/userInterfaces";
 
 const newAlbumInitial = {
   artist: "",
@@ -44,7 +45,7 @@ function NewAlbumModal({
   const [selectedGendre, setSelectedGendre] = useState("");
 
   const onSubmit: SubmitHandler<NewAlbumInterface> = (data) => {
-    if (data) {
+    if (data && session) {
       setFormTrigger(true);
       const date = new Date(data.year);
       const year = date.getFullYear();

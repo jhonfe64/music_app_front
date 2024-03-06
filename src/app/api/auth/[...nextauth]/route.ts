@@ -1,10 +1,8 @@
 import NextAuth from "next-auth";
 import { artist } from "@/endpoints/artist";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { UserSessionInterface } from "@/interfaces/userInterfaces";
 import { NextApiRequest } from "next";
 import { UserToken } from "@/interfaces/userInterfaces";
-import { Session } from "next-auth";
 
 export const handler = NextAuth({
   session: { strategy: "jwt" },
@@ -64,4 +62,6 @@ export const handler = NextAuth({
 
 export { handler as GET, handler as POST };
 
+//adapter se usan para tipar objetos que ya vienen tipados en la libreria nextauth en
+//este caso lo que hice fue retipar el objeto session
 //https://next-auth.js.org/v3/getting-started/typescript

@@ -3,19 +3,20 @@ import React from "react";
 import { useState } from "react";
 import AlbumsList from "@/components/artist/albumsList/AlbumsList";
 import { Button } from "primereact/button";
-//import NewAlbumModal from "@/components/artist/modals/NewAlbumModal";
+import { modalAction } from "@/redux/actions/artist/artistActions";
+import { useDispatch } from "react-redux";
 const NewAlbumModal = React.lazy(
   () => import("@/components/artist/modals/NewAlbumModal")
 );
 
 function Albums() {
-  const [visibility, setVisibility] = useState(false);
+  const dispatch = useDispatch();
   return (
     <div className="grid grid-cols-12">
       <div className="col-span-12">
         <h1 className="font-semibold text-xl mt-8 mb-8">Albums</h1>
         <Button
-          onClick={() => setVisibility(true)}
+          onClick={() => dispatch(modalAction("add_album"))}
           label="Agregar album"
           pt={{
             root: {
@@ -31,7 +32,7 @@ function Albums() {
             <i className="pi pi-plus"></i>
           </span>
         </Button>
-        <NewAlbumModal visibility={visibility} setVisibility={setVisibility} />
+        <NewAlbumModal />
       </div>
       <div className="col-span-12">
         <AlbumsList />

@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import { ArtistInterface } from "@/interfaces/artistInterfaces";
 import { UpdateArtistInterface } from "@/interfaces/artistInterfaces";
 import InputError from "@/components/common/inputError/InputError";
 import useFetch from "@/hooks/useFetch";
 import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
 import { artist as artistEndpoint } from "@/endpoints/artist";
 import { ToastifyEnum } from "@/interfaces/common";
+import { selectUserData } from "@/redux/selectors/artist/artistSelector";
 
 const initialFormData = {
   artisticName: "",
@@ -20,8 +18,7 @@ const initialFormData = {
 };
 
 function EditProfile() {
-  const state: RootState = useSelector((state: RootState) => state);
-  const artist = state.artist.loggedUser as ArtistInterface;
+  const artist = selectUserData();
   const [editprofileData, setEditProfileData] =
     useState<UpdateArtistInterface>(initialFormData);
   const [trigger, setTrigger] = useState(false);

@@ -32,7 +32,8 @@ const useFetch = (
           }
           const data = await res.json();
           data && setData(data);
-        } else if (type === "post") {
+        }
+        if (type === "post") {
           const res = await fetch(url, {
             method: "POST",
             body: JSON.stringify(body),

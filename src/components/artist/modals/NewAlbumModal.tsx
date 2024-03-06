@@ -11,7 +11,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import InputError from "@/components/common/inputError/InputError";
 import { NewAlbumInterface } from "@/interfaces/artistInterfaces";
 import { useSession } from "next-auth/react";
-import { UserSessionInterface } from "@/interfaces/userInterfaces";
+import { ToastifyEnum } from "@/interfaces/common";
+import ToastifyNotification from "@/components/common/toastifyNotification/ToastifyNotification";
+import { selectModalId } from "@/redux/selectors/artist/artistSelector";
+import { useDispatch } from "react-redux";
+import { modalAction } from "@/redux/actions/artist/artistActions";
 
 const newAlbumInitial = {
   artist: "",
@@ -21,13 +25,7 @@ const newAlbumInitial = {
   gendre: "",
 };
 
-function NewAlbumModal({
-  visibility,
-  setVisibility,
-}: {
-  visibility: boolean;
-  setVisibility: any;
-}) {
+function NewAlbumModal() {
   const {
     register,
     handleSubmit,
@@ -37,12 +35,16 @@ function NewAlbumModal({
   } = useForm<NewAlbumInterface>();
 
   const { data: session, status } = useSession();
+  const modal_id = selectModalId(); //redux
+  const dispatch = useDispatch();
 
   const [trigger, setTrigger] = useState(false);
   const [formTrigger, setFormTrigger] = useState(false);
   const [albumToSave, setAlbumToSave] =
     useState<NewAlbumInterface>(newAlbumInitial);
   const [selectedGendre, setSelectedGendre] = useState("");
+  const [formDataError, setFormDataError] = useState("");
+  const [formDataSuccess, setFormDataSuccess] = useState("");
 
   const onSubmit: SubmitHandler<NewAlbumInterface> = (data) => {
     if (data && session) {
@@ -53,16 +55,26 @@ function NewAlbumModal({
       data["artist"] = session?.user?.id;
       setAlbumToSave(data);
     }
+    if (data) {
+      setFormDataSuccess("");
+    }
+    setFormDataError("");
   };
 
-  useEffect(() => {
-    if (visibility) {
-      setTrigger(true);
-    }
-  }, [visibility]);
-
   //para obtener los generos musicales
-  const { data, error } = useFetch(album.MUSIC_GENDRES, "get", trigger);
+  const { data: musicGendres } = useFetch(album.MUSIC_GENDRES, "get", trigger);
+
+  const [visible, setVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (modal_id === "add_album") {
+      setVisible(true);
+      setTrigger(true);
+    } else {
+      setVisible(false);
+    }
+    reset();
+  }, [modal_id, visible]);
 
   let today = new Date();
   let month = today.getMonth();
@@ -74,7 +86,7 @@ function NewAlbumModal({
   maxDate.setFullYear(nextYear);
 
   //para guardar el nuevo album
-  const { data: albumData, error: albumError } = useFetch(
+  const { data, error } = useFetch(
     album.CREATE_ABUM,
     "post",
     formTrigger,
@@ -82,17 +94,24 @@ function NewAlbumModal({
   );
 
   useEffect(() => {
-    if (albumData) {
+    if (data?.newAlbum?._id) {
+      setVisible(false);
+      dispatch(modalAction(""));
+      reset();
       setFormTrigger(false);
       setAlbumToSave(newAlbumInitial);
-      reset();
       setSelectedGendre("");
+      setFormDataSuccess("Se ha guardado el album");
     }
-  }, [albumData]);
+  }, [data]);
 
-  console.log("el suaurio guardado", albumData);
-  console.log("trigger", formTrigger);
-  console.log("alBumData", albumData);
+  useEffect(() => {
+    if (error !== null) {
+      setFormTrigger(false);
+      setAlbumToSave(newAlbumInitial);
+      setFormDataError("Este album ya existe");
+    }
+  }, [error]);
 
   addLocale("es", {
     clear: "Limpiar",
@@ -114,8 +133,8 @@ function NewAlbumModal({
           }}
           className="border p-8 rounded-lg bg-white"
           header="Nuevo album"
-          visible={visibility}
-          onHide={() => setVisibility(false)}
+          visible={visible}
+          onHide={() => dispatch(modalAction(""))}
         >
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full">
@@ -224,7 +243,7 @@ function NewAlbumModal({
                   {...register("gendre", {
                     required: "Selecciona el genero musical",
                   })}
-                  options={data?.gendres}
+                  options={musicGendres?.gendres}
                   optionLabel="name"
                   className="w-full md:w-14rem"
                   value={selectedGendre}
@@ -265,6 +284,18 @@ function NewAlbumModal({
           </form>
         </Dialog>
       </div>
+      {formDataSuccess.length > 0 && (
+        <ToastifyNotification
+          message={formDataSuccess}
+          type={ToastifyEnum.success}
+        />
+      )}
+      {formDataError.length > 0 && (
+        <ToastifyNotification
+          message={formDataError}
+          type={ToastifyEnum.error}
+        />
+      )}
     </div>
   );
 }
